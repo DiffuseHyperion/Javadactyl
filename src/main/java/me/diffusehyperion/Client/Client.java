@@ -1,7 +1,7 @@
-package org.example.Client;
+package me.diffusehyperion.Client;
 
-import org.example.Pair;
-import org.example.PterodactylAPI;
+import me.diffusehyperion.PterodactylAPI;
+import me.diffusehyperion.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 

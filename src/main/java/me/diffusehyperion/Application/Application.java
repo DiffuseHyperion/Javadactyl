@@ -1,6 +1,6 @@
-package org.example.Application;
+package me.diffusehyperion.Application;
 
-import org.example.PterodactylAPI;
+import me.diffusehyperion.PterodactylAPI;
 
 public class Application extends PterodactylAPI {
 

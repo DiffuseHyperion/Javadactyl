@@ -1,4 +1,4 @@
-package org.example.Client;
+package me.diffusehyperion.Client;
 
 import org.json.simple.JSONObject;
 

@@ -1,4 +1,4 @@
-package org.example;
+package me.diffusehyperion;
 
 public class Pair<X, Y> {
     private X value1;

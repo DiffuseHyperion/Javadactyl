@@ -1,4 +1,4 @@
-package org.example;
+package me.diffusehyperion;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
