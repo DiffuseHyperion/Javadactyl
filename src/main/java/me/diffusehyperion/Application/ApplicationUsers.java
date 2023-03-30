@@ -28,8 +28,8 @@ public class ApplicationUsers {
         this.firstName = (String) object.get("first_name");
         this.lastName =(String)  object.get("last_name");
         this.language = (String) object.get("language");
-        this.rootAdmin = (boolean) object.get("root_admin").getAsBoolean();
-        this.twoFactorAuthentication = (boolean) object.get("2fa").getAsBoolean();
+        this.rootAdmin = (boolean) object.get("root_admin");
+        this.twoFactorAuthentication = (boolean) object.get("2fa");
         this.createdAt = LocalDateTime.parse((String) object.get("created_at"));
         this.updatedAt = LocalDateTime.parse((String) object.get("updated_at"));
     }
