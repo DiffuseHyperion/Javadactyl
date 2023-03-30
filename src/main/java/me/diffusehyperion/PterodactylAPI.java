@@ -55,11 +55,13 @@ public class PterodactylAPI {
         try {
             URL url = new URL(targetURL);
             HttpURLConnection uc = (HttpURLConnection) url.openConnection();
-
+            uc.setDoOutput(true);
             uc.setRequestMethod(method);
+
             for (Pair<String, String> parameter : urlParameters) {
                 uc.setRequestProperty(parameter.getValue1(), parameter.getValue2());
             }
+
             OutputStream os = uc.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(os);
             osw.write(output);
