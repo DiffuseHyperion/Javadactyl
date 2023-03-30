@@ -1,6 +1,9 @@
 package me.diffusehyperion.Application;
 
 import me.diffusehyperion.PterodactylAPI;
+import org.json.simple.JSONObject;
+
+import java.time.LocalDateTime;
 
 public class ApplicationUsers {
 
@@ -18,7 +21,7 @@ public class ApplicationUsers {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public UserAttributes(Application application, JSONObject object) {
+    public ApplicationUsers(Application application, JSONObject object) {
         this.application = application;
         this.id = (int) object.get("id");
         this.externalId = (String) object.get("external_id");
