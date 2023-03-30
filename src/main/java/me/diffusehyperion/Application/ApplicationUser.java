@@ -1,14 +1,13 @@
 package me.diffusehyperion.Application;
 
-import me.diffusehyperion.PterodactylAPI;
 import org.json.simple.JSONObject;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
-public class ApplicationUsers {
+public class ApplicationUser {
 
-    private Application application;
-    private int id;
+    private final Application application;
+    private Long id;
     private String externalId;
     private String uuid;
     private String username;
@@ -18,12 +17,12 @@ public class ApplicationUsers {
     private String language;
     private boolean rootAdmin;
     private boolean twoFactorAuthentication;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private ZonedDateTime createdAt;
+    private ZonedDateTime updatedAt;
 
-    public ApplicationUsers(Application application, JSONObject object) {
+    public ApplicationUser(Application application, JSONObject object) {
         this.application = application;
-        this.id = (int) object.get("id");
+        this.id = (Long) object.get("id");
         this.externalId = (String) object.get("external_id");
         this.uuid = (String) object.get("uuid");
         this.username = (String) object.get("username");
@@ -33,11 +32,15 @@ public class ApplicationUsers {
         this.language = (String) object.get("language");
         this.rootAdmin = (boolean) object.get("root_admin");
         this.twoFactorAuthentication = (boolean) object.get("2fa");
-        this.createdAt = LocalDateTime.parse((String) object.get("created_at"));
-        this.updatedAt = LocalDateTime.parse((String) object.get("updated_at"));
+        this.createdAt = ZonedDateTime.parse((String) object.get("created_at"));
+        this.updatedAt = ZonedDateTime.parse((String) object.get("updated_at"));
     }
 
-    public int getId() {
+    public Application getApplication() {
+        return application;
+    }
+
+    public Long getId() {
         return id;
     }
 
@@ -77,11 +80,11 @@ public class ApplicationUsers {
         return twoFactorAuthentication;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public ZonedDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public ZonedDateTime getUpdatedAt() {
         return updatedAt;
     }
 }
