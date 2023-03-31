@@ -25,7 +25,7 @@ public class ApplicationUser {
 
     public ApplicationUser(Application application, JSONObject object) {
         this.application = application;
-        this.id = (int) (long) object.get("id");
+        this.id = ((Long) object.get("id")).intValue();
         this.externalId = (String) object.get("external_id");
         this.uuid = (String) object.get("uuid");
         this.username = (String) object.get("username");

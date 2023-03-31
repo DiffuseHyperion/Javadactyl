@@ -3,45 +3,45 @@ package me.diffusehyperion.Client;
 import org.json.simple.JSONObject;
 
 public class ClientServerLimits {
-    private final Long memory;
-    private final Long swap;
-    private final Long disk;
-    private final Long io;
-    private final Long cpu;
-    private final Long threads;
+    private final int memory;
+    private final int swap;
+    private final int disk;
+    private final int io;
+    private final int cpu;
+    private final int threads;
     private final Boolean oomDisabled;
 
     public ClientServerLimits(JSONObject object) {
-        memory = (Long) object.get("memory");
-        swap = (Long) object.get("swap");
-        disk = (Long) object.get("disk");
-        io = (Long) object.get("io");
-        cpu = (Long) object.get("cpu");
-        threads = (Long) object.get("threads");
+        memory = ((Long) object.get("memory")).intValue();
+        swap = ((Long) object.get("swap")).intValue();
+        disk = ((Long) object.get("disk")).intValue();
+        io = ((Long) object.get("io")).intValue();
+        cpu = ((Long) object.get("cpu")).intValue();
+        threads = ((Long) object.get("threads")).intValue();
         oomDisabled = (Boolean) object.get("oom_disabled");
     }
 
-    public Long getMemory() {
+    public int getMemory() {
         return memory;
     }
 
-    public Long getSwap() {
+    public int getSwap() {
         return swap;
     }
 
-    public Long getDisk() {
+    public int getDisk() {
         return disk;
     }
 
-    public Long getIo() {
+    public int getIo() {
         return io;
     }
 
-    public Long getCpu() {
+    public int getCpu() {
         return cpu;
     }
 
-    public Long getThreads() {
+    public int getThreads() {
         return threads;
     }
 

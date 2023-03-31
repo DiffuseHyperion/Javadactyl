@@ -3,25 +3,25 @@ package me.diffusehyperion.Client;
 import org.json.simple.JSONObject;
 
 public class ClientServerFeatureLimits {
-    private final Long databases;
-    private final Long allocations;
-    private final Long backups;
+    private final int databases;
+    private final int allocations;
+    private final int backups;
 
     public ClientServerFeatureLimits(JSONObject object) {
-        databases = (Long) object.get("databases");
-        allocations = (Long) object.get("allocations");
-        backups = (Long) object.get("backups");
+        databases = ((Long) object.get("databases")).intValue();
+        allocations = ((Long) object.get("allocations")).intValue();
+        backups = ((Long) object.get("backups")).intValue();
     }
 
-    public Long getDatabases() {
+    public int getDatabases() {
         return databases;
     }
 
-    public Long getAllocations() {
+    public int getAllocations() {
         return allocations;
     }
 
-    public Long getBackups() {
+    public int getBackups() {
         return backups;
     }
 }

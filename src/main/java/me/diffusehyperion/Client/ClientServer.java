@@ -11,7 +11,7 @@ public class ClientServer {
 
     private String identifier;
 
-    private Long internalID;
+    private int internalID;
 
     private String uuid;
 
@@ -50,7 +50,7 @@ public class ClientServer {
         this.client = client;
         serverOwner = (Boolean) object.get("server_owner");
         identifier = (String) object.get("identifier");
-        internalID = (Long) object.get("internal_id");
+        internalID = ((Long) object.get("internal_id")).intValue();
         uuid = (String) object.get("uuid");
         name = (String) object.get("name");
         //node
@@ -78,7 +78,7 @@ public class ClientServer {
     public String getIdentifier() {
         return identifier;
     }
-    public Long getInternalID() {
+    public int getInternalID() {
         return internalID;
     }
     public String getUUID() {
