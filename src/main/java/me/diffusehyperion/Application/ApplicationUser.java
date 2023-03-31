@@ -87,4 +87,58 @@ public class ApplicationUser {
     public ZonedDateTime getUpdatedAt() {
         return updatedAt;
     }
+
+    private void updateUser(String email, String username, String firstName, String lastName, String language, String password, int id) {
+        JSONObject output = new JSONObject();
+        output.put("email", email);
+        output.put("username", username);
+        output.put("first_name", firstName);
+        output.put("last_name", lastName);
+        output.put("language", language);
+        output.put("password", password);
+    
+        Pair<Integer, JSONObject> request = handleRequest(makeOutputRequest(getHost() + "api/application/users/" + id,
+        "PATCH", getParameters(), output.toJSONString()));
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+        
+        updateUser(email, this.username, this.firstName, this.lastName, this.language, this.password, this.id);
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+        
+        updateUser(this.email, username, this.firstName, this.lastName, this.language, this.password, this.id);
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+        
+        updateUser(this.email, this.username, firstName, this.lastName, this.language, this.password, this.id);
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+        
+        updateUser(this.email, this.username, this.firstName, lastName, this.language, this.password, this.id);
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+        
+        updateUser(this.email, this.username, this.firstName, this.lastName, language, this.password, this.id);
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+        
+        updateUser(this.email, this.username, this.firstName, lastName, this.language, password, this.id);
+    }
+
+    public void deleteUser() {
+        Pair<Integer, JSONObject> request = handleRequest(makeOutputRequest(getHost() + "api/application/users" + this.id,
+        "DELETE", getParameters(), output.toJSONString()));
+    }
 }
