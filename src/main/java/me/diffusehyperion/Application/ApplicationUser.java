@@ -1,13 +1,16 @@
 package me.diffusehyperion.Application;
 
+import me.diffusehyperion.Pair;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 public class ApplicationUser {
 
     private final Application application;
-    private Long id;
+    private int id;
     private String externalId;
     private String uuid;
     private String username;
@@ -22,7 +25,7 @@ public class ApplicationUser {
 
     public ApplicationUser(Application application, JSONObject object) {
         this.application = application;
-        this.id = (Long) object.get("id");
+        this.id = (int) (long) object.get("id");
         this.externalId = (String) object.get("external_id");
         this.uuid = (String) object.get("uuid");
         this.username = (String) object.get("username");
@@ -40,7 +43,7 @@ public class ApplicationUser {
         return application;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
@@ -88,57 +91,59 @@ public class ApplicationUser {
         return updatedAt;
     }
 
-    private void updateUser(String email, String username, String firstName, String lastName, String language, String password, int id) {
+    private void updateUser(String email, String username, String firstName, String lastName, @Nullable String language, @Nullable String password, int id) {
         JSONObject output = new JSONObject();
         output.put("email", email);
         output.put("username", username);
         output.put("first_name", firstName);
         output.put("last_name", lastName);
-        output.put("language", language);
-        output.put("password", password);
-    
-        Pair<Integer, JSONObject> request = handleRequest(makeOutputRequest(getHost() + "api/application/users/" + id,
-        "PATCH", getParameters(), output.toJSONString()));
+        if (Objects.nonNull(language)) {
+            output.put("language", language);
+        }
+        if (Objects.nonNull(password)) {
+            output.put("password", password);
+        }
+
+        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/users/" + id,
+        "PATCH", application.getParameters(), output.toString()));
     }
 
     public void setEmail(String email) {
         this.email = email;
         
-        updateUser(email, this.username, this.firstName, this.lastName, this.language, this.password, this.id);
+        updateUser(email, this.username, this.firstName, this.lastName, this.language, null, this.id);
     }
 
     public void setUsername(String username) {
         this.username = username;
         
-        updateUser(this.email, username, this.firstName, this.lastName, this.language, this.password, this.id);
+        updateUser(this.email, username, this.firstName, this.lastName, this.language, null, this.id);
     }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
         
-        updateUser(this.email, this.username, firstName, this.lastName, this.language, this.password, this.id);
+        updateUser(this.email, this.username, firstName, this.lastName, this.language, null, this.id);
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
         
-        updateUser(this.email, this.username, this.firstName, lastName, this.language, this.password, this.id);
+        updateUser(this.email, this.username, this.firstName, lastName, this.language, null, this.id);
     }
 
     public void setLanguage(String language) {
         this.language = language;
         
-        updateUser(this.email, this.username, this.firstName, this.lastName, language, this.password, this.id);
+        updateUser(this.email, this.username, this.firstName, this.lastName, language, null, this.id);
     }
 
     public void setPassword(String password) {
-        this.password = password;
-        
         updateUser(this.email, this.username, this.firstName, lastName, this.language, password, this.id);
     }
 
     public void deleteUser() {
-        Pair<Integer, JSONObject> request = handleRequest(makeOutputRequest(getHost() + "api/application/users" + this.id,
-        "DELETE", getParameters(), output.toJSONString()));
+        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/users" + this.id,
+                "DELETE", application.getParameters(), null));
     }
 }

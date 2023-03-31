@@ -14,7 +14,7 @@ public class Client extends PterodactylAPI {
 
     public List<ClientServer> getServerList(){
         Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/client",
-                "GET", getParameters()));
+                "GET", getParameters(), null));
 
         JSONArray serversArray = (JSONArray) request.getValue2().get("data");
 
@@ -27,7 +27,7 @@ public class Client extends PterodactylAPI {
 
     public ClientServer getServer(String identifier) {
         Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/client/servers/" + identifier,
-                "GET", getParameters()));
+                "GET", getParameters(), null));
         return new ClientServer(this, (JSONObject) request.getValue2().get("attributes"));
     }
 }

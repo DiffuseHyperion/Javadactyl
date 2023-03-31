@@ -1,14 +1,18 @@
 package me.diffusehyperion;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PterodactylAPI {
     private final String apiKey;
@@ -26,55 +30,32 @@ public class PterodactylAPI {
     //make private in the future
     public List<Pair<String, String>> getParameters() {
         try {
-            return toParameters("Accept", "application/json", "Authorization", "Bearer " + apiKey);
+            return toParameters("Accept", "application/json", "Authorization", "Bearer " + apiKey, "Content-Type", "application/json");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
 
-    public Pair<Integer, String> makeRequest(String targetURL, String method, List<Pair<String, String>> urlParameters) {
-        try {
-            URL url = new URL(targetURL);
-            HttpURLConnection uc = (HttpURLConnection) url.openConnection();
-
-            uc.setRequestMethod(method);
-            for (Pair<String, String> parameter : urlParameters) {
-                uc.setRequestProperty(parameter.getValue1(), parameter.getValue2());
-            }
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
-            return new Pair<>(uc.getResponseCode(), in.readLine());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public Pair<Integer, String> makeRequest(String targetURL, String method, List<Pair<String, String>> urlParameters, @Nullable String body) {
+        HttpRequest request;
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
+                .uri(URI.create(targetURL));
+        if (Objects.nonNull(body)) {
+                    requestBuilder.method(method, HttpRequest.BodyPublishers.ofString(body));
+        } else {
+                    requestBuilder.method(method, HttpRequest.BodyPublishers.noBody());
         }
-    }
+        for (Pair<String, String> params : urlParameters) {
+            requestBuilder.header(params.getValue1(), params.getValue2());
+        }
+        request = requestBuilder.build();
 
-    // could have added a nullable variable but meh
-    public Pair<Integer, String> makeOutputRequest(String targetURL, String method, List<Pair<String, String>> urlParameters, String output) {
+        HttpClient client = HttpClient.newHttpClient();
         try {
-            URL url = new URL(targetURL);
-            HttpURLConnection uc = (HttpURLConnection) url.openConnection();
-            uc.setDoOutput(true);
-            uc.setRequestMethod(method);
-
-            for (Pair<String, String> parameter : urlParameters) {
-                uc.setRequestProperty(parameter.getValue1(), parameter.getValue2());
-            }
-
-            OutputStream os = uc.getOutputStream();
-            OutputStreamWriter osw = new OutputStreamWriter(os);
-            osw.write(output);
-            osw.flush();
-            osw.close();
-            os.close();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
-            String line = in.readLine();
-            in.close();
-            uc.disconnect();
-            return new Pair<>(uc.getResponseCode(), line);
-        } catch (IOException e) {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return new Pair<>(response.statusCode(), response.body());
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

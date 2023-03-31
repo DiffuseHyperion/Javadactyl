@@ -17,7 +17,7 @@ public class Application extends PterodactylAPI {
 
     public List<ApplicationUser> getUsers() {
         Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/application/users",
-                "GET", getParameters()));
+                "GET", getParameters(), null));
 
         JSONArray userArray = (JSONArray) request.getValue2().get("data");
 
@@ -30,7 +30,7 @@ public class Application extends PterodactylAPI {
 
     public ApplicationUser getUser(int ID) {
         Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/application/users/" + ID,
-                "GET", getParameters()));
+                "GET", getParameters(), null));
         return new ApplicationUser(this, (JSONObject) request.getValue2().get("attributes"));
     }
 
@@ -40,7 +40,7 @@ public class Application extends PterodactylAPI {
         output.put("username", username);
         output.put("first_name", firstName);
         output.put("last_name", lastName);
-        Pair<Integer, JSONObject> request = handleRequest(makeOutputRequest(getHost() + "api/application/users",
+        Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/application/users",
                 "POST", getParameters(), output.toJSONString()));
 
         return new ApplicationUser(this, (JSONObject) request.getValue2().get("attributes"));
