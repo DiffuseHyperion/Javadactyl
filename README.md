@@ -1,6 +1,8 @@
 # Javadactyl
 A Pterodactyl API wrapper for Java.
 
+Currently unfinished! Check back later for updates.
+
 # Usage
 To get started:
 ```Java
