@@ -30,4 +30,10 @@ public class Client extends PterodactylAPI {
                 "GET", getParameters(), null));
         return new ClientServer(this, (JSONObject) request.getValue2().get("attributes"));
     }
+
+    public ClientAccount getAccount() {
+        Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/client/account",
+                "GET", getParameters(), null));
+        return new ClientAccount(this, (JSONObject) request.getValue2().get("attributes"));
+    }
 }
