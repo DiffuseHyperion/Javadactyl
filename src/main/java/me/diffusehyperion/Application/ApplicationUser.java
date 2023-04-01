@@ -91,7 +91,7 @@ public class ApplicationUser {
         return updatedAt;
     }
 
-    private void updateUser(String email, String username, String firstName, String lastName, @Nullable String language, @Nullable String password, int id) {
+    private int updateUser(String email, String username, String firstName, String lastName, @Nullable String language, @Nullable String password, int id) {
         JSONObject output = new JSONObject();
         output.put("email", email);
         output.put("username", username);
@@ -106,44 +106,46 @@ public class ApplicationUser {
 
         Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/users/" + id,
         "PATCH", application.getParameters(), output.toString()));
+        return request.getValue1();
     }
 
-    public void setEmail(String email) {
+    public int setEmail(String email) {
         this.email = email;
         
-        updateUser(email, this.username, this.firstName, this.lastName, this.language, null, this.id);
+        return updateUser(email, this.username, this.firstName, this.lastName, this.language, null, this.id);
     }
 
-    public void setUsername(String username) {
+    public int setUsername(String username) {
         this.username = username;
         
-        updateUser(this.email, username, this.firstName, this.lastName, this.language, null, this.id);
+        return updateUser(this.email, username, this.firstName, this.lastName, this.language, null, this.id);
     }
 
-    public void setFirstName(String firstName) {
+    public int setFirstName(String firstName) {
         this.firstName = firstName;
         
-        updateUser(this.email, this.username, firstName, this.lastName, this.language, null, this.id);
+        return updateUser(this.email, this.username, firstName, this.lastName, this.language, null, this.id);
     }
 
-    public void setLastName(String lastName) {
+    public int setLastName(String lastName) {
         this.lastName = lastName;
         
-        updateUser(this.email, this.username, this.firstName, lastName, this.language, null, this.id);
+        return updateUser(this.email, this.username, this.firstName, lastName, this.language, null, this.id);
     }
 
-    public void setLanguage(String language) {
+    public int setLanguage(String language) {
         this.language = language;
         
-        updateUser(this.email, this.username, this.firstName, this.lastName, language, null, this.id);
+        return updateUser(this.email, this.username, this.firstName, this.lastName, language, null, this.id);
     }
 
-    public void setPassword(String password) {
-        updateUser(this.email, this.username, this.firstName, lastName, this.language, password, this.id);
+    public int setPassword(String password) {
+        return updateUser(this.email, this.username, this.firstName, lastName, this.language, password, this.id);
     }
 
-    public void deleteUser() {
+    public int deleteUser() {
         Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/users" + this.id,
                 "DELETE", application.getParameters(), null));
+        return request.getValue1();
     }
 }

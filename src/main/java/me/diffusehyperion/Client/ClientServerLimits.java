@@ -1,6 +1,9 @@
 package me.diffusehyperion.Client;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
+
+import java.util.Objects;
 
 public class ClientServerLimits {
     private final int memory;
@@ -8,7 +11,7 @@ public class ClientServerLimits {
     private final int disk;
     private final int io;
     private final int cpu;
-    private final int threads;
+    @Nullable private final Integer threads;
     private final Boolean oomDisabled;
 
     public ClientServerLimits(JSONObject object) {
@@ -17,7 +20,11 @@ public class ClientServerLimits {
         disk = ((Long) object.get("disk")).intValue();
         io = ((Long) object.get("io")).intValue();
         cpu = ((Long) object.get("cpu")).intValue();
-        threads = ((Long) object.get("threads")).intValue();
+        if (Objects.isNull(object.get("threads"))) {
+            threads = null;
+        } else {
+            threads = ((Long) object.get("threads")).intValue();
+        }
         oomDisabled = (Boolean) object.get("oom_disabled");
     }
 
@@ -41,7 +48,7 @@ public class ClientServerLimits {
         return cpu;
     }
 
-    public int getThreads() {
+    public @Nullable Integer getThreads() {
         return threads;
     }
 

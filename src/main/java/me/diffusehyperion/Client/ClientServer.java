@@ -1,5 +1,6 @@
 package me.diffusehyperion.Client;
 
+import me.diffusehyperion.Pair;
 import org.json.simple.JSONObject;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class ClientServer {
 
     private String name;
 
-    // node;
+    private String nodeName;
 
     private Boolean nodeUnderMaintenance;
 
@@ -53,7 +54,7 @@ public class ClientServer {
         internalID = ((Long) object.get("internal_id")).intValue();
         uuid = (String) object.get("uuid");
         name = (String) object.get("name");
-        //node
+        nodeName = (String) object.get("node");
         nodeUnderMaintenance = (Boolean) object.get("is_node_under_maintenance");
         sftpDetails = new ClientServerSFTPDetails((JSONObject) object.get("sftp_details"));
         description = (String) object.get("description");
@@ -118,7 +119,37 @@ public class ClientServer {
         return isInstalling;
     }
 
-    public void sendCommand(String command) {
+    public int sendCommand(String command) {
+        JSONObject output = new JSONObject();
+        output.put("command", command);
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/command",
+                "POST", client.getParameters(), output.toString()));
+        return request.getValue1();
+    }
 
+    public int changePowerState(PowerState power) {
+        JSONObject output = new JSONObject();
+        output.put("signal", power.toString());
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/power",
+                "POST", client.getParameters(), output.toString()));
+        return request.getValue1();
+    }
+
+    public enum PowerState {
+        START("start"),
+        STOP("stop"),
+        RESTART("restart"),
+        KILL("kill");
+
+        private final String command;
+
+        PowerState(String command) {
+            this.command = command;
+        }
+
+        @Override
+        public String toString() {
+            return this.command;
+        }
     }
 }

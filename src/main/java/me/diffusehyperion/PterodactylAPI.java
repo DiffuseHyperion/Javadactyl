@@ -63,11 +63,15 @@ public class PterodactylAPI {
 
     public Pair<Integer, JSONObject> handleRequest(Pair<Integer, String> request) {
         JSONObject object;
-        try {
-            object = (JSONObject) new JSONParser().parse(request.getValue2());
-        } catch (ParseException e) {
-            System.out.println("Javadactyl encountered a malformed JSON! This is a problem with Pterodactyl, please report it to them!");
-            throw new RuntimeException(e);
+        if (request.getValue2().isEmpty()) {
+            object = null;
+        } else {
+            try {
+                object = (JSONObject) new JSONParser().parse(request.getValue2());
+            } catch (ParseException e) {
+                System.out.println("Javadactyl encountered a malformed JSON! This is a problem with Pterodactyl, please report it to them!");
+                throw new RuntimeException(e);
+            }
         }
 
         return new Pair<>(request.getValue1(), object);
