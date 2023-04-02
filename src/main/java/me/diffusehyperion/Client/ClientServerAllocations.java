@@ -2,7 +2,7 @@ package me.diffusehyperion.Client;
 
 import org.json.simple.JSONObject;
 
-public class ClientServerRelationshipsAllocations {
+public class ClientServerAllocations {
     private int id;
     private String ip;
     private String ipAlias;
@@ -10,7 +10,7 @@ public class ClientServerRelationshipsAllocations {
     private String notes;
     private boolean isDefault;
 
-    public ClientServerRelationshipsAllocations(JSONObject object) {
+    public ClientServerAllocations(JSONObject object) {
         this.id = ((Long) object.get("id")).intValue();
         this.ip = (String) object.get("ip");
         this.ipAlias = (String) object.get("ip_alias");

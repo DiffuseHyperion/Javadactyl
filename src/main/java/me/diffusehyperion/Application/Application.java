@@ -45,4 +45,17 @@ public class Application extends PterodactylAPI {
 
         return new ApplicationUser(this, (JSONObject) request.getValue2().get("attributes"));
     }
+
+    public List<ApplicationLocation> getLocations() {
+        Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/application/locations",
+                "GET", getParameters(), null));
+        JSONArray locationArray = (JSONArray) request.getValue2().get("data");
+
+        List<ApplicationLocation> locationList = new ArrayList<>();
+        for (Object server : locationArray.toArray()) {
+            locationList.add(new ApplicationLocation(this, (JSONObject) ((JSONObject) server).get("attributes")));
+        }
+
+        return locationList;
+    }
 }

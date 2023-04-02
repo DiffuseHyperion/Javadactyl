@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ClientServerRelationships {
 
-    private List<ClientServerRelationshipsAllocations> allocationsList = new ArrayList<>();
+    private List<ClientServerAllocations> allocationsList = new ArrayList<>();
 
     public ClientServerRelationships(JSONObject object) {
         JSONArray allocationsArray = (JSONArray) ((JSONObject) object.get("allocations")).get("data");
@@ -16,12 +16,12 @@ public class ClientServerRelationships {
         // Iterate over each server object in the array and create a new Server object
         for (Object allocationObject : allocationsArray) {
             JSONObject allocationJSONObject = (JSONObject) allocationObject;
-            ClientServerRelationshipsAllocations server = new ClientServerRelationshipsAllocations((JSONObject) allocationJSONObject.get("attributes"));
+            ClientServerAllocations server = new ClientServerAllocations((JSONObject) allocationJSONObject.get("attributes"));
             allocationsList.add(server);
         }
     }
 
-    public List<ClientServerRelationshipsAllocations> getAllocationsList() {
+    public List<ClientServerAllocations> getAllocationsList() {
         return allocationsList;
     }
 }
