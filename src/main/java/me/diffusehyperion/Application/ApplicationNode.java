@@ -1,8 +1,12 @@
 package me.diffusehyperion.Application;
 
+import me.diffusehyperion.Pair;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationNode {
 
@@ -134,5 +138,33 @@ public class ApplicationNode {
 
     public ZonedDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public List<ApplicationNodeAllocations> getAllocations() {
+        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/nodes/" + id + "/allocations",
+                "GET", application.getParameters(), null));
+        JSONArray allocationsArray = (JSONArray) request.getValue2().get("data");
+        List<ApplicationNodeAllocations> allocationsList = new ArrayList<>();
+        for (Object object : allocationsArray) {
+            JSONObject jsonObject = (JSONObject) object;
+            allocationsList.add(new ApplicationNodeAllocations(this, (JSONObject) jsonObject.get("attributes")));
+        }
+        return allocationsList;
+    }
+
+    public int createAllocation(String ip, List<Integer> ports) {
+        JSONObject output = new JSONObject();
+        output.put("ip", ip);
+        output.put("ports", ports.toArray());
+        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/nodes/" + id + "/allocations",
+                "POST", application.getParameters(), output.toString()));
+
+        return request.getValue1();
+    }
+
+    public int deleteAllocation(int allocationID) {
+        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/nodes/" + id + "/allocations/" + allocationID,
+                "DELETE", application.getParameters(), null));
+        return request.getValue1();
     }
 }
