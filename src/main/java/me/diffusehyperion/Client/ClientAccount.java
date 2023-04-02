@@ -93,7 +93,7 @@ public class ClientAccount {
     }
 
     public List<ClientAccountAPIKey> getAPIKeys() {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/account/password",
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/account/api-keys",
                 "GET", client.getParameters(), null));
         JSONArray keyArray = (JSONArray) request.getValue2().get("data");
         List<ClientAccountAPIKey> keyList = new ArrayList<>();
