@@ -14,6 +14,7 @@ publishing {
     publications {
         Javadactyl(MavenPublication) {
             from components.java
+            artifactId "javadactyl"
         }
     }
     repositories {
