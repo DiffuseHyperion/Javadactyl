@@ -1,7 +1,7 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
-apply plugin: 'maven-publish'
 
 group 'me.diffusehyperion'
 version '1.0.0'
@@ -16,7 +16,7 @@ publishing {
             name = "GitHubPackages"
             url = "https://maven.pkg.github.com/DiffuseHyperion/Javadactyl"
             credentials {
-                username = System.getenv("GITHUB_USERNAME")
+                username = "DiffuseHyperion"
                 password = System.getenv("GITHUB_TOKEN")
             }
         }
