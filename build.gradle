@@ -11,12 +11,17 @@ repositories {
 }
 
 publishing {
+    publications {
+        Javadactyl(MavenPublication) {
+            from components.java
+        }
+    }
     repositories {
         maven {
             name = "GitHubPackages"
             url = "https://maven.pkg.github.com/DiffuseHyperion/Javadactyl"
             credentials {
-                username = "DiffuseHyperion"
+                username = System.getenv("GITHUB_USERNAME")
                 password = System.getenv("GITHUB_TOKEN")
             }
         }
