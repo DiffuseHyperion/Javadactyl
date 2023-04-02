@@ -16,7 +16,7 @@ publishing {
             name = "GitHubPackages"
             url = "https://maven.pkg.github.com/DiffuseHyperion/Javadactyl"
             credentials {
-                username = System.getenv("GITHUB_ACTOR")
+                username = System.getenv("GITHUB_USERNAME")
                 password = System.getenv("GITHUB_TOKEN")
             }
         }
