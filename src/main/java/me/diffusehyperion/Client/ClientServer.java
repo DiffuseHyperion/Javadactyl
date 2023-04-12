@@ -8,7 +8,7 @@ import java.util.List;
 public class ClientServer {
     private Client client;
 
-    private Boolean serverOwner;
+    private boolean serverOwner;
 
     private String identifier;
 
@@ -20,7 +20,7 @@ public class ClientServer {
 
     private String nodeName;
 
-    private Boolean nodeUnderMaintenance;
+    private boolean nodeUnderMaintenance;
 
     private ClientServerSFTPDetails sftpDetails;
 
@@ -38,24 +38,24 @@ public class ClientServer {
 
     // tf is this??? private boolean status;
 
-    private Boolean isSuspended;
+    private boolean isSuspended;
 
-    private Boolean isInstalling;
+    private boolean isInstalling;
 
-    private Boolean isTransferring;
+    private boolean isTransferring;
 
-    // relationships
+    private ClientServerRelationships relationships;
 
 
     public ClientServer(Client client, JSONObject object) {
         this.client = client;
-        serverOwner = (Boolean) object.get("server_owner");
+        serverOwner = (boolean) object.get("server_owner");
         identifier = (String) object.get("identifier");
         internalID = ((Long) object.get("internal_id")).intValue();
         uuid = (String) object.get("uuid");
         name = (String) object.get("name");
         nodeName = (String) object.get("node");
-        nodeUnderMaintenance = (Boolean) object.get("is_node_under_maintenance");
+        nodeUnderMaintenance = (boolean) object.get("is_node_under_maintenance");
         sftpDetails = new ClientServerSFTPDetails((JSONObject) object.get("sftp_details"));
         description = (String) object.get("description");
         limits = new ClientServerLimits((JSONObject) object.get("limits"));
@@ -64,16 +64,16 @@ public class ClientServer {
         eggFeatures = (List<String>) object.get("egg_features");
         featureLimits = new ClientServerFeatureLimits((JSONObject) object.get("feature_limits"));
         //status = (boolean) object.get("status");
-        isSuspended = (Boolean) object.get("is_suspended");
-        isInstalling = (Boolean) object.get("is_installing");
-        isTransferring = (Boolean) object.get("is_transferring");
-        // relationships
+        isSuspended = (boolean) object.get("is_suspended");
+        isInstalling = (boolean) object.get("is_installing");
+        isTransferring = (boolean) object.get("is_transferring");
+        relationships = new ClientServerRelationships(this, (JSONObject) object.get("relationships"));
     }
 
     public Client getClient() {
         return client;
     }
-    public Boolean isServerOwner() {
+    public boolean isServerOwner() {
         return serverOwner;
     }
     public String getIdentifier() {
@@ -88,7 +88,10 @@ public class ClientServer {
     public String getName() {
         return name;
     }
-    public Boolean isNodeUnderMaintenance() {
+    public String getNodeName() {
+        return nodeName;
+    }
+    public boolean isNodeUnderMaintenance() {
         return nodeUnderMaintenance;
     }
     public ClientServerSFTPDetails getSftpDetails() {
@@ -115,8 +118,17 @@ public class ClientServer {
     //public boolean isStatus() {
     //    return status;
     //}
-    public Boolean isInstalling() {
+    public boolean isSuspended() {
+        return isSuspended;
+    }
+    public boolean isInstalling() {
         return isInstalling;
+    }
+    public boolean isTransferring() {
+        return isTransferring;
+    }
+    public ClientServerRelationships getRelationships() {
+        return relationships;
     }
 
     public int sendCommand(String command) {
