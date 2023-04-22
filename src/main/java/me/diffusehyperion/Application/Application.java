@@ -34,6 +34,12 @@ public class Application extends PterodactylAPI {
         return new ApplicationUser(this, (JSONObject) request.getValue2().get("attributes"));
     }
 
+    public ApplicationUser getExternalUser(int ExternalID) {
+        Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/application/users/external/" + ExternalID,
+                "GET", getParameters(), null));
+        return new ApplicationUser(this, (JSONObject) request.getValue2().get("attributes"));
+    }
+
     public ApplicationUser createUser(String email, String username, String firstName, String lastName) {
         JSONObject output = new JSONObject();
         output.put("email", email);

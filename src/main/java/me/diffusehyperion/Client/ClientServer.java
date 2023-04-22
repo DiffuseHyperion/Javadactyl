@@ -1,9 +1,13 @@
 package me.diffusehyperion.Client;
 
 import me.diffusehyperion.Pair;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ClientServer {
     private Client client;
@@ -164,4 +168,43 @@ public class ClientServer {
             return this.command;
         }
     }
+
+    public List<ClientServerBackup> getBackups() {
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/backups",
+                "GET", client.getParameters(), null));
+        JSONArray backupArray = (JSONArray) request.getValue2().get("data");
+        List<ClientServerBackup> backupList = new ArrayList<>();
+        for (Object obj : backupArray) {
+            JSONObject jsonObject = (JSONObject) obj;
+            backupList.add(new ClientServerBackup(jsonObject));
+        }
+        return backupList;
+    }
+
+    // we return status code too because backup has a reasonable chance of failure
+    public Pair<Integer, ClientServerBackup> createBackup() {
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/backups",
+                "POST", client.getParameters(), null));
+        return new Pair<>(request.getValue1(), new ClientServerBackup((JSONObject) request.getValue2().get("attributes")));
+    }
+
+    public ClientServerBackup getBackup(UUID uuid) {
+Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/backups/" + uuid.toString(),
+                "GET", client.getParameters(), null));
+        return new ClientServerBackup((JSONObject) request.getValue2().get("attributes"));
+    }
+
+    public URL getBackupDownloadURL(UUID uuid) {
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/backups/" + uuid.toString() + "/download",
+                "GET", client.getParameters(), null));
+        return (URL) request.getValue2().get("attributes");
+    }
+
+    public int deleteBackup(UUID uuid) {
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/backups/" + uuid.toString(),
+                "DELETE", client.getParameters(), null));
+        return request.getValue1();
+    }
+
+
 }
