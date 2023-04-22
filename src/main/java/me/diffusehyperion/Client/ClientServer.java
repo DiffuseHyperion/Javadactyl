@@ -248,5 +248,11 @@ Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(clie
         return request.getValue1();
     }
 
+    public ClientServerResources getResources() {
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/resources",
+                "GET", client.getParameters(), null));
+        return new ClientServerResources((JSONObject) request.getValue2().get("attributes"));
+    }
+
 
 }
