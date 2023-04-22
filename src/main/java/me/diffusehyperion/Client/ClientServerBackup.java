@@ -1,15 +1,18 @@
 package me.diffusehyperion.Client;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class ClientServerBackup {
 
     private UUID uuid;
     private String name;
-    private String[] ignoredFiles;
+    private List<String> ignoredFiles = new ArrayList<>();
     private String sha256Hash;
     private long bytes;
     private ZonedDateTime createdAt;
@@ -19,13 +22,9 @@ public class ClientServerBackup {
         this.uuid = UUID.fromString((String) json.get("uuid"));
         this.name = (String) json.get("name");
 
-        Object ignoredFilesObj = json.get("ignored_files");
-        if (ignoredFilesObj instanceof String) {
-            // If the ignored_files is a string, split it by commas and store as an array
-            this.ignoredFiles = ((String) ignoredFilesObj).split(",");
-        } else {
-            // Otherwise, leave it as null
-            this.ignoredFiles = null;
+        JSONArray ignoredFilesArray = (JSONArray) json.get("ignored_files");
+        for (Object ignoredFile : ignoredFilesArray) {
+            this.ignoredFiles.add((String) ignoredFile);
         }
 
         this.sha256Hash = (String) json.get("sha256_hash");
@@ -42,7 +41,7 @@ public class ClientServerBackup {
         return name;
     }
 
-    public String[] getIgnoredFiles() {
+    public List<String> getIgnoredFiles() {
         return ignoredFiles;
     }
 

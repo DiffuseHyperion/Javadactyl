@@ -176,7 +176,7 @@ public class ClientServer {
         List<ClientServerBackup> backupList = new ArrayList<>();
         for (Object obj : backupArray) {
             JSONObject jsonObject = (JSONObject) obj;
-            backupList.add(new ClientServerBackup(jsonObject));
+            backupList.add(new ClientServerBackup((JSONObject) jsonObject.get("attributes")));
         }
         return backupList;
     }
@@ -202,6 +202,48 @@ Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(clie
 
     public int deleteBackup(UUID uuid) {
         Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/backups/" + uuid.toString(),
+                "DELETE", client.getParameters(), null));
+        return request.getValue1();
+    }
+
+    public List<ClientServerSubuser> getSubusers() {
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/users",
+                "GET", client.getParameters(), null));
+        JSONArray subuserArray = (JSONArray) request.getValue2().get("data");
+        System.out.println(subuserArray);
+        List<ClientServerSubuser> subuserList = new ArrayList<>();
+        for (Object obj : subuserArray) {
+            JSONObject jsonObject = (JSONObject) obj;
+            subuserList.add(new ClientServerSubuser((JSONObject) jsonObject.get("attributes")));
+        }
+        return subuserList;
+    }
+
+    public Pair<Integer, ClientServerSubuser> createSubuser(String email, String... permissions) {
+        JSONObject output = new JSONObject();
+        output.put("email", email);
+        output.put("permissions", permissions);
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/users",
+                "POST", client.getParameters(), output.toString()));
+        return new Pair<>(request.getValue1(), new ClientServerSubuser((JSONObject) request.getValue2().get("attributes")));
+    }
+
+    public Pair<Integer, ClientServerSubuser> getSubuser(UUID uuid) {
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/users/" + uuid.toString(),
+                "GET", client.getParameters(), null));
+        return new Pair<>(request.getValue1(), new ClientServerSubuser((JSONObject) request.getValue2().get("attributes")));
+    }
+
+    public Pair<Integer, ClientServerSubuser> updateSubuser(UUID uuid, String... permissions) {
+        JSONObject output = new JSONObject();
+        output.put("permissions", permissions);
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/users/" + uuid.toString(),
+                "POST", client.getParameters(), output.toString()));
+        return new Pair<>(request.getValue1(), new ClientServerSubuser((JSONObject) request.getValue2().get("attributes")));
+    }
+
+    public int deleteSubuser(UUID uuid) {
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/users/" + uuid.toString(),
                 "DELETE", client.getParameters(), null));
         return request.getValue1();
     }

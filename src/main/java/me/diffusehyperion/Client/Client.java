@@ -12,10 +12,9 @@ public class Client extends PterodactylAPI {
         super(apiKey, host);
     }
 
-    public List<ClientServer> getServerList(){
+    public List<ClientServer> getServers(){
         Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/client",
                 "GET", getParameters(), null));
-
         JSONArray serversArray = (JSONArray) request.getValue2().get("data");
 
         List<ClientServer> serverList = new ArrayList<>();
