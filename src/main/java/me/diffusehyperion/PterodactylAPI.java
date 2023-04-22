@@ -20,14 +20,17 @@ public class PterodactylAPI {
 
     public PterodactylAPI(String apiKey, String host) {
         this.apiKey = apiKey;
+        if (!host.startsWith("http://") && !host.startsWith("https://")) {
+            throw new IllegalArgumentException("Host must start with http:// or https://");
+        }
         if (!host.endsWith("/")) {
+            System.out.println("WARNING: Host does not end with /, adding it for you");
             this.host = host + "/";
         } else {
             this.host = host;
         }
     }
 
-    //make private in the future
     public List<Pair<String, String>> getParameters() {
         try {
             return toParameters("Accept", "application/json", "Authorization", "Bearer " + apiKey, "Content-Type", "application/json");
@@ -77,7 +80,7 @@ public class PterodactylAPI {
         return new Pair<>(request.getValue1(), object);
     }
 
-    public List<Pair<String, String>> toParameters(String... parameters) throws Exception {
+    private List<Pair<String, String>> toParameters(String... parameters) throws Exception {
         if ((parameters.length % 2) == 1) {
             throw new Exception("Missing value for key " + parameters[parameters.length - 1]);
         }

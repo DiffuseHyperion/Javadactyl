@@ -64,4 +64,30 @@ public class Application extends PterodactylAPI {
 
         return locationList;
     }
+
+    public ApplicationLocation getLocation(int ID) {
+        Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/application/locations/" + ID,
+                "GET", getParameters(), null));
+        return new ApplicationLocation(this, (JSONObject) request.getValue2().get("attributes"));
+    }
+
+    public Pair<Integer, ApplicationLocation> createLocation(String identifier, String location) {
+        JSONObject output = new JSONObject();
+        output.put("short", identifier);
+        output.put("long", location);
+        Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/application/locations",
+                "POST", getParameters(), output.toJSONString()));
+
+        return new Pair<>(request.getValue1(), new ApplicationLocation(this, (JSONObject) request.getValue2().get("attributes")));
+    }
+
+    public int deleteLocation(int ID) {
+        Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/application/locations/" + ID,
+                "DELETE", getParameters(), null));
+        return request.getValue1();
+    }
+
+    public int deleteLocation(ApplicationLocation location) {
+        return deleteLocation(location.getId());
+    }
 }

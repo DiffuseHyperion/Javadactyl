@@ -1,15 +1,16 @@
 package me.diffusehyperion.Application;
 
+import me.diffusehyperion.Pair;
 import org.json.simple.JSONObject;
 
 public class ApplicationLocation {
 
     private final Application application;
-    private int id;
+    private final int id;
     private String shortName;
     private String longName;
-    private String updatedAt;
-    private String createdAt;
+    private final String updatedAt;
+    private final String createdAt;
 
     public ApplicationLocation(Application application, JSONObject object) {
         this.application = application;
@@ -42,5 +43,36 @@ public class ApplicationLocation {
 
     public String getCreatedAt() {
         return createdAt;
+    }
+
+
+    /**
+     * @return Hpst response code
+     */
+    public int setShortName(String shortName) {
+        JSONObject output = new JSONObject();
+        output.put("short", shortName);
+        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/locations/" + this.id,
+                "POST", application.getParameters(), output.toJSONString()));
+
+        if (request.getValue1() == 200) {
+            this.shortName = shortName;
+        }
+        return request.getValue1();
+    }
+
+    /**
+     * @return Hpst response code
+     */
+    public int setLongName(String longName) {
+        JSONObject output = new JSONObject();
+        output.put("long", longName);
+        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/locations/" + this.id,
+                "POST", application.getParameters(), output.toJSONString()));
+
+        if (request.getValue1() == 200) {
+            this.longName = longName;
+        }
+        return request.getValue1();
     }
 }
