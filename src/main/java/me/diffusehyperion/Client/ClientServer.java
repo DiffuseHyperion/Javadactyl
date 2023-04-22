@@ -254,5 +254,23 @@ Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(clie
         return new ClientServerResources((JSONObject) request.getValue2().get("attributes"));
     }
 
+    public int renameServer(String newName) {
+        JSONObject output = new JSONObject();
+        output.put("name", newName);
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/settings/rename",
+                "POST", client.getParameters(), output.toString()));
+        return request.getValue1();
+    }
 
+    public int reinstallServer() {
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/settings/reinstall",
+                "POST", client.getParameters(), null));
+        return request.getValue1();
+    }
+
+    public ClientServerStartup getStartup() {
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/startup",
+                "GET", client.getParameters(), null));
+        return new ClientServerStartup(this, request.getValue2());
+    }
 }
