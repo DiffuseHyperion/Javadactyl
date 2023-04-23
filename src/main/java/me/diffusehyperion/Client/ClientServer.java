@@ -1,56 +1,37 @@
 package me.diffusehyperion.Client;
 
 import me.diffusehyperion.Pair;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ClientServer {
     private Client client;
-
     private boolean serverOwner;
-
     private String identifier;
-
     private int internalID;
-
     private String uuid;
-
     private String name;
-
     private String nodeName;
-
     private boolean nodeUnderMaintenance;
-
-    private ClientServerSFTPDetails sftpDetails;
-
+    private SFTPDetails sftpDetails;
     private String description;
-
-    private ClientServerLimits limits;
-
+    private Limits limits;
     private String invocation;
-
     private String dockerImage;
-
     private List<String> eggFeatures;
-
-    private ClientServerFeatureLimits featureLimits;
-
+    private FeatureLimits featureLimits;
     // tf is this??? private boolean status;
-
     private boolean isSuspended;
-
     private boolean isInstalling;
-
     private boolean isTransferring;
-
     private ClientServerRelationships relationships;
-
-
     public ClientServer(Client client, JSONObject object) {
         this.client = client;
         serverOwner = (boolean) object.get("server_owner");
@@ -60,13 +41,13 @@ public class ClientServer {
         name = (String) object.get("name");
         nodeName = (String) object.get("node");
         nodeUnderMaintenance = (boolean) object.get("is_node_under_maintenance");
-        sftpDetails = new ClientServerSFTPDetails((JSONObject) object.get("sftp_details"));
+        sftpDetails = new SFTPDetails((JSONObject) object.get("sftp_details"));
         description = (String) object.get("description");
-        limits = new ClientServerLimits((JSONObject) object.get("limits"));
+        limits = new Limits((JSONObject) object.get("limits"));
         invocation = (String) object.get("invocation");
         dockerImage = (String) object.get("docker_image");
         eggFeatures = (List<String>) object.get("egg_features");
-        featureLimits = new ClientServerFeatureLimits((JSONObject) object.get("feature_limits"));
+        featureLimits = new FeatureLimits((JSONObject) object.get("feature_limits"));
         //status = (boolean) object.get("status");
         isSuspended = (boolean) object.get("is_suspended");
         isInstalling = (boolean) object.get("is_installing");
@@ -98,13 +79,13 @@ public class ClientServer {
     public boolean isNodeUnderMaintenance() {
         return nodeUnderMaintenance;
     }
-    public ClientServerSFTPDetails getSftpDetails() {
+    public SFTPDetails getSftpDetails() {
         return sftpDetails;
     }
     public String getDescription() {
         return description;
     }
-    public ClientServerLimits getLimits() {
+    public Limits getLimits() {
         return limits;
     }
     public String getInvocation() {
@@ -116,7 +97,7 @@ public class ClientServer {
     public List<String> getEggFeatures() {
         return eggFeatures;
     }
-    public ClientServerFeatureLimits getFeatureLimits() {
+    public FeatureLimits getFeatureLimits() {
         return featureLimits;
     }
     //public boolean isStatus() {
@@ -134,6 +115,93 @@ public class ClientServer {
     public ClientServerRelationships getRelationships() {
         return relationships;
     }
+
+    public static class SFTPDetails {
+        private final String ip;
+        private final int port;
+        public SFTPDetails(JSONObject object) {
+            ip = (String) object.get("ip");
+            port = ((Long) object.get("port")).intValue();
+        }
+        public String getIp() {
+            return ip;
+        }
+        public int getPort() {
+            return port;
+        }
+    }
+    public static class FeatureLimits {
+        private final int databases;
+        private final int allocations;
+        private final int backups;
+        public FeatureLimits(JSONObject object) {
+            databases = ((Long) object.get("databases")).intValue();
+            allocations = ((Long) object.get("allocations")).intValue();
+            backups = ((Long) object.get("backups")).intValue();
+        }
+        public int getDatabases() {
+            return databases;
+        }
+        public int getAllocations() {
+            return allocations;
+        }
+        public int getBackups() {
+            return backups;
+        }
+    }
+    public static class Limits {
+        private final int memory;
+        private final int swap;
+        private final int disk;
+        private final int io;
+        private final int cpu;
+        @Nullable
+        private final Integer threads;
+        private final Boolean oomDisabled;
+
+        public Limits(JSONObject object) {
+            memory = ((Long) object.get("memory")).intValue();
+            swap = ((Long) object.get("swap")).intValue();
+            disk = ((Long) object.get("disk")).intValue();
+            io = ((Long) object.get("io")).intValue();
+            cpu = ((Long) object.get("cpu")).intValue();
+            if (Objects.isNull(object.get("threads"))) {
+                threads = null;
+            } else {
+                threads = ((Long) object.get("threads")).intValue();
+            }
+            oomDisabled = (Boolean) object.get("oom_disabled");
+        }
+
+        public int getMemory() {
+            return memory;
+        }
+
+        public int getSwap() {
+            return swap;
+        }
+
+        public int getDisk() {
+            return disk;
+        }
+
+        public int getIo() {
+            return io;
+        }
+
+        public int getCpu() {
+            return cpu;
+        }
+
+        public @Nullable Integer getThreads() {
+            return threads;
+        }
+
+        public Boolean isOomDisabled() {
+            return oomDisabled;
+        }
+    }
+
 
     public int sendCommand(String command) {
         JSONObject output = new JSONObject();
