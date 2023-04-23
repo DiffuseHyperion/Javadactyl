@@ -22,6 +22,20 @@ public class ClientServerDatabase {
         this.connectionsFrom = (String) json.get("connections_from");
         this.maxConnections = (int) json.get("max_connections");
     }
+    public static class Host {
+        private String address;
+        private int port;
+        public Host(JSONObject json) {
+            this.address = (String) json.get("address");
+            this.port = (int) json.get("port");
+        }
+        public String getAddress() {
+            return address;
+        }
+        public int getPort() {
+            return port;
+        }
+    }
 
     public String getId() {
         return id;
@@ -52,23 +66,5 @@ public class ClientServerDatabase {
                 "POST", server.getClient().getParameters(), null));
         return new Pair<>(request.getValue1(), ((String) (((JSONObject) ((JSONObject) ((JSONObject) ((JSONObject)
                         request.getValue2().get("attributes")).get("relationships")).get("password")).get("attributes")).get("password"))));
-    }
-}
-
-class Host {
-    private String address;
-    private int port;
-
-    public Host(JSONObject json) {
-        this.address = (String) json.get("address");
-        this.port = (int) json.get("port");
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public int getPort() {
-        return port;
     }
 }
