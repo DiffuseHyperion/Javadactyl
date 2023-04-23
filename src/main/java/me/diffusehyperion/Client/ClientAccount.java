@@ -71,14 +71,7 @@ public class ClientAccount {
     }
 
     public int setPassword(String existingPassword, String newPassword) {
-        JSONObject output = new JSONObject();
-        output.put("current_password", existingPassword);
-        output.put("password", newPassword);
-        output.put("password_confirmation", newPassword);
-
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/account/password",
-                "PUT", client.getParameters(), output.toString()));
-        return request.getValue1();
+        return setPassword(existingPassword, newPassword, newPassword);
     }
 
     public int setPassword(String existingPassword, String newPassword, String confirmPassword) {

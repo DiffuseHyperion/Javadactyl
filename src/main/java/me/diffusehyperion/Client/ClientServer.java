@@ -273,4 +273,33 @@ Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(clie
                 "GET", client.getParameters(), null));
         return new ClientServerStartup(this, request.getValue2());
     }
+
+    public List<ClientServerDatabase> getDatabases() {
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/databases",
+                "GET", client.getParameters(), null));
+        JSONArray databaseArray = (JSONArray) request.getValue2().get("data");
+        List<ClientServerDatabase> databaseList = new ArrayList<>();
+        for (Object obj : databaseArray) {
+            JSONObject jsonObject = (JSONObject) obj;
+            databaseList.add(new ClientServerDatabase(this, (JSONObject) jsonObject.get("attributes")));
+        }
+        return databaseList;
+    }
+
+    public Pair<Integer, Pair<ClientServerDatabase, String>> createDatabase(String database, String remote) {
+        JSONObject output = new JSONObject();
+        output.put("database", database);
+        output.put("remote", remote);
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/databases",
+                "POST", client.getParameters(), output.toString()));
+        return new Pair<>(request.getValue1(), new Pair<>(new ClientServerDatabase(this, (JSONObject) request.getValue2().get("attributes")),
+                ((String) (((JSONObject) ((JSONObject) ((JSONObject) ((JSONObject)
+                        request.getValue2().get("attributes")).get("relationships")).get("password")).get("attributes")).get("password")))));
+    }
+
+    public int deleteDatabase(String id) {
+        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/databases/" + id,
+                "DELETE", client.getParameters(), null));
+        return request.getValue1();
+    }
 }
