@@ -90,4 +90,24 @@ public class Application extends PterodactylAPI {
     public int deleteLocation(ApplicationLocation location) {
         return deleteLocation(location.getId());
     }
+
+    public List<ApplicationNest> getNests() {
+        Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/application/nests",
+                "GET", getParameters(), null));
+        JSONArray nestArray = (JSONArray) request.getValue2().get("data");
+        List<ApplicationNest> nestList = new ArrayList<>();
+
+        for (Object nest : nestArray) {
+            JSONObject nestObject = (JSONObject) nest;
+            nestList.add(new ApplicationNest(this, (JSONObject) nestObject.get("attributes")));
+        }
+
+        return nestList;
+    }
+
+    public ApplicationNest getNest(int ID) {
+        Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/application/nests/" + ID,
+                "GET", getParameters(), null));
+        return new ApplicationNest(this, (JSONObject) request.getValue2().get("attributes"));
+    }
 }
