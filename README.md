@@ -3,6 +3,8 @@ A Pterodactyl API wrapper for Java.
 
 Currently unfinished! Check back later for updates.
 
+Current progress: Preparing for Release 0.0.1 - https://trello.com/b/L0eps7oh/javadactyl
+
 # Usage
 To get started:
 ```Java
