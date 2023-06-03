@@ -1,5 +1,6 @@
 package me.diffusehyperion.Client;
 
+import me.diffusehyperion.HttpMethods;
 import me.diffusehyperion.Pair;
 import org.json.simple.JSONObject;
 
@@ -56,18 +57,18 @@ public class ClientServerAllocations {
         JSONObject output = new JSONObject();
         output.put("notes", notes);
 
-        Pair<Integer, JSONObject> request = server.getClient().handleRequest(server.getClient().makeRequest(
+        Pair<Integer, JSONObject> request = server.getClient().request(
                 server.getClient().getHost() + "api/client/servers/" + server.getIdentifier() + "/network/allocations/" + id,
-                "POST", server.getClient().getParameters(), output.toString()));
+                HttpMethods.POST, server.getClient().getParameters(), output.toString());
         return request.getValue1();
     }
 
     public int setPrimary() {
         this.isDefault = true;
 
-        Pair<Integer, JSONObject> request = server.getClient().handleRequest(server.getClient().makeRequest(
+        Pair<Integer, JSONObject> request = server.getClient().request(
                 server.getClient().getHost() + "api/client/servers/" + server.getIdentifier() + "/network/allocations/" + id + "/primary",
-                "POST", server.getClient().getParameters(), null));
+                HttpMethods.POST, server.getClient().getParameters(), null);
         return request.getValue1();
     }
 }

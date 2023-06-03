@@ -1,5 +1,6 @@
 package me.diffusehyperion.Client;
 
+import me.diffusehyperion.HttpMethods;
 import me.diffusehyperion.Pair;
 import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
@@ -206,16 +207,16 @@ public class ClientServer {
     public int sendCommand(String command) {
         JSONObject output = new JSONObject();
         output.put("command", command);
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/command",
-                "POST", client.getParameters(), output.toString()));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/command",
+                HttpMethods.POST, client.getParameters(), output.toString());
         return request.getValue1();
     }
 
     public int changePowerState(PowerState power) {
         JSONObject output = new JSONObject();
         output.put("signal", power.toString());
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/power",
-                "POST", client.getParameters(), output.toString()));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/power",
+                HttpMethods.POST, client.getParameters(), output.toString());
         return request.getValue1();
     }
 
@@ -238,8 +239,8 @@ public class ClientServer {
     }
 
     public List<ClientServerBackup> getBackups() {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/backups",
-                "GET", client.getParameters(), null));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/backups",
+                HttpMethods.GET, client.getParameters(), null);
         JSONArray backupArray = (JSONArray) request.getValue2().get("data");
         List<ClientServerBackup> backupList = new ArrayList<>();
         for (Object obj : backupArray) {
@@ -251,32 +252,32 @@ public class ClientServer {
 
     // we return status code too because backup has a reasonable chance of failure
     public Pair<Integer, ClientServerBackup> createBackup() {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/backups",
-                "POST", client.getParameters(), null));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/backups",
+                HttpMethods.POST, client.getParameters(), null);
         return new Pair<>(request.getValue1(), new ClientServerBackup((JSONObject) request.getValue2().get("attributes")));
     }
 
     public ClientServerBackup getBackup(UUID uuid) {
-Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/backups/" + uuid.toString(),
-                "GET", client.getParameters(), null));
+Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/backups/" + uuid.toString(),
+                HttpMethods.GET, client.getParameters(), null);
         return new ClientServerBackup((JSONObject) request.getValue2().get("attributes"));
     }
 
     public URL getBackupDownloadURL(UUID uuid) {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/backups/" + uuid.toString() + "/download",
-                "GET", client.getParameters(), null));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/backups/" + uuid.toString() + "/download",
+                HttpMethods.GET, client.getParameters(), null);
         return (URL) request.getValue2().get("attributes");
     }
 
     public int deleteBackup(UUID uuid) {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/backups/" + uuid.toString(),
-                "DELETE", client.getParameters(), null));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/backups/" + uuid.toString(),
+                HttpMethods.DELETE, client.getParameters(), null);
         return request.getValue1();
     }
 
     public List<ClientServerSubuser> getSubusers() {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/users",
-                "GET", client.getParameters(), null));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/users",
+                HttpMethods.GET, client.getParameters(), null);
         JSONArray subuserArray = (JSONArray) request.getValue2().get("data");
         System.out.println(subuserArray);
         List<ClientServerSubuser> subuserList = new ArrayList<>();
@@ -291,60 +292,60 @@ Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(clie
         JSONObject output = new JSONObject();
         output.put("email", email);
         output.put("permissions", permissions);
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/users",
-                "POST", client.getParameters(), output.toString()));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/users",
+                HttpMethods.POST, client.getParameters(), output.toString());
         return new Pair<>(request.getValue1(), new ClientServerSubuser((JSONObject) request.getValue2().get("attributes")));
     }
 
     public Pair<Integer, ClientServerSubuser> getSubuser(UUID uuid) {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/users/" + uuid.toString(),
-                "GET", client.getParameters(), null));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/users/" + uuid.toString(),
+                HttpMethods.GET, client.getParameters(), null);
         return new Pair<>(request.getValue1(), new ClientServerSubuser((JSONObject) request.getValue2().get("attributes")));
     }
 
     public Pair<Integer, ClientServerSubuser> updateSubuser(UUID uuid, String... permissions) {
         JSONObject output = new JSONObject();
         output.put("permissions", permissions);
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/users/" + uuid.toString(),
-                "POST", client.getParameters(), output.toString()));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/users/" + uuid.toString(),
+                HttpMethods.POST, client.getParameters(), output.toString());
         return new Pair<>(request.getValue1(), new ClientServerSubuser((JSONObject) request.getValue2().get("attributes")));
     }
 
     public int deleteSubuser(UUID uuid) {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/users/" + uuid.toString(),
-                "DELETE", client.getParameters(), null));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/users/" + uuid.toString(),
+                HttpMethods.DELETE, client.getParameters(), null);
         return request.getValue1();
     }
 
     public ClientServerResources getResources() {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/resources",
-                "GET", client.getParameters(), null));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/resources",
+                HttpMethods.GET, client.getParameters(), null);
         return new ClientServerResources((JSONObject) request.getValue2().get("attributes"));
     }
 
     public int renameServer(String newName) {
         JSONObject output = new JSONObject();
         output.put("name", newName);
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/settings/rename",
-                "POST", client.getParameters(), output.toString()));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/settings/rename",
+                HttpMethods.POST, client.getParameters(), output.toString());
         return request.getValue1();
     }
 
     public int reinstallServer() {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/settings/reinstall",
-                "POST", client.getParameters(), null));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/settings/reinstall",
+                HttpMethods.POST, client.getParameters(), null);
         return request.getValue1();
     }
 
     public ClientServerStartup getStartup() {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/startup",
-                "GET", client.getParameters(), null));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/startup",
+                HttpMethods.GET, client.getParameters(), null);
         return new ClientServerStartup(this, request.getValue2());
     }
 
     public List<ClientServerDatabase> getDatabases() {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/databases",
-                "GET", client.getParameters(), null));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/databases",
+                HttpMethods.GET, client.getParameters(), null);
         JSONArray databaseArray = (JSONArray) request.getValue2().get("data");
         List<ClientServerDatabase> databaseList = new ArrayList<>();
         for (Object obj : databaseArray) {
@@ -358,16 +359,16 @@ Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(clie
         JSONObject output = new JSONObject();
         output.put("database", database);
         output.put("remote", remote);
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/databases",
-                "POST", client.getParameters(), output.toString()));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/databases",
+                HttpMethods.POST, client.getParameters(), output.toString());
         return new Pair<>(request.getValue1(), new Pair<>(new ClientServerDatabase(this, (JSONObject) request.getValue2().get("attributes")),
                 ((String) (((JSONObject) ((JSONObject) ((JSONObject) ((JSONObject)
                         request.getValue2().get("attributes")).get("relationships")).get("password")).get("attributes")).get("password")))));
     }
 
     public int deleteDatabase(String id) {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/servers/" + identifier + "/databases/" + id,
-                "DELETE", client.getParameters(), null));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/servers/" + identifier + "/databases/" + id,
+                HttpMethods.DELETE, client.getParameters(), null);
         return request.getValue1();
     }
 }

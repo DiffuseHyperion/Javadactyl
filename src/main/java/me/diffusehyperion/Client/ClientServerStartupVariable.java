@@ -1,5 +1,6 @@
 package me.diffusehyperion.Client;
 
+import me.diffusehyperion.HttpMethods;
 import me.diffusehyperion.Pair;
 import org.json.simple.JSONObject;
 
@@ -61,9 +62,9 @@ public class ClientServerStartupVariable {
         output.put("key", envVariable);
         output.put("value", newValue);
 
-        Pair<Integer, JSONObject> request = server.getClient().handleRequest(server.getClient().makeRequest(
+        Pair<Integer, JSONObject> request = server.getClient().request(
                 server.getClient().getHost() + "api/client/servers/" + server.getIdentifier() + "/startup/variable",
-                "PUT", server.getClient().getParameters(), output.toString()));
+                HttpMethods.PUT, server.getClient().getParameters(), output.toString());
 
         if (request.getValue1() == 200) {
             this.serverValue = newValue;

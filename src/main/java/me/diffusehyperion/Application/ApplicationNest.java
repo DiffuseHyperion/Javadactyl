@@ -1,5 +1,6 @@
 package me.diffusehyperion.Application;
 
+import me.diffusehyperion.HttpMethods;
 import me.diffusehyperion.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -59,8 +60,8 @@ public class ApplicationNest {
 
     // TODO: Add include parameters
     public List<ApplicationNestEgg> getEggs() {
-        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/nests/" + this.id + "/eggs",
-                "GET", application.getParameters(), null));
+        Pair<Integer, JSONObject> request = application.request(application.getHost() + "api/application/nests/" + this.id + "/eggs",
+                HttpMethods.GET, application.getParameters(), null);
         JSONArray eggsArray = (JSONArray) request.getValue2().get("data");
         List<ApplicationNestEgg> eggsList = new ArrayList<>();
         for (Object egg : eggsArray) {
@@ -71,8 +72,8 @@ public class ApplicationNest {
     }
 
     public ApplicationNestEgg getEgg(int ID) {
-        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/nests/" + this.id + "/eggs/" + ID,
-                "GET", application.getParameters(), null));
+        Pair<Integer, JSONObject> request = application.request(application.getHost() + "api/application/nests/" + this.id + "/eggs/" + ID,
+                HttpMethods.GET, application.getParameters(), null);
         return new ApplicationNestEgg((JSONObject) request.getValue2().get("attributes"));
     }
 }

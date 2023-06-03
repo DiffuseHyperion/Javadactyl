@@ -1,5 +1,6 @@
 package me.diffusehyperion.Client;
 
+import me.diffusehyperion.HttpMethods;
 import me.diffusehyperion.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -34,9 +35,9 @@ public class ClientServerRelationships {
      * @return If the auto assign was successful.
      */
     public boolean assignAllocation() {
-        Pair<Integer, JSONObject> request = server.getClient().handleRequest(server.getClient().makeRequest(
+        Pair<Integer, JSONObject> request = server.getClient().request(
                 server.getClient().getHost() + "api/client/servers/" + server.getIdentifier() + "/network/allocations",
-                "POST", server.getClient().getParameters(), null));
+                HttpMethods.POST, server.getClient().getParameters(), null);
 
         if (request.getValue1() != 200) {
             return false;
@@ -46,9 +47,9 @@ public class ClientServerRelationships {
     }
 
     public int deleteAllocation(int id) {
-        Pair<Integer, JSONObject> request = server.getClient().handleRequest(server.getClient().makeRequest(
+        Pair<Integer, JSONObject> request = server.getClient().request(
                 server.getClient().getHost() + "api/client/servers/" + server.getIdentifier() + "/network/allocations/" + id,
-                "DELETE", server.getClient().getParameters(), null));
+                HttpMethods.DELETE, server.getClient().getParameters(), null);
 
         return request.getValue1();
     }

@@ -40,14 +40,14 @@ public class PterodactylAPI {
     }
 
 
-    public Pair<Integer, String> makeRequest(String targetURL, String method, List<Pair<String, String>> urlParameters, @Nullable String body) {
+    public Pair<Integer, String> makeRequest(String targetURL, HttpMethods method, List<Pair<String, String>> urlParameters, @Nullable String body) {
         HttpRequest request;
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
                 .uri(URI.create(targetURL));
         if (Objects.nonNull(body)) {
-                    requestBuilder.method(method, HttpRequest.BodyPublishers.ofString(body));
+                    requestBuilder.method(method.toString(), HttpRequest.BodyPublishers.ofString(body));
         } else {
-                    requestBuilder.method(method, HttpRequest.BodyPublishers.noBody());
+                    requestBuilder.method(method.toString(), HttpRequest.BodyPublishers.noBody());
         }
         for (Pair<String, String> params : urlParameters) {
             requestBuilder.header(params.getValue1(), params.getValue2());
@@ -78,6 +78,10 @@ public class PterodactylAPI {
         }
 
         return new Pair<>(request.getValue1(), object);
+    }
+
+    public Pair<Integer, JSONObject> request(String targetURL, HttpMethods method, List<Pair<String, String>> urlParameters, @Nullable String body) {
+        return handleRequest(makeRequest(targetURL, method, urlParameters, body));
     }
 
     private List<Pair<String, String>> toParameters(String... parameters) throws Exception {

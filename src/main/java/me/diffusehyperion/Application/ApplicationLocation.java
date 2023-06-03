@@ -1,5 +1,6 @@
 package me.diffusehyperion.Application;
 
+import me.diffusehyperion.HttpMethods;
 import me.diffusehyperion.Pair;
 import org.json.simple.JSONObject;
 
@@ -52,8 +53,8 @@ public class ApplicationLocation {
     public int setShortName(String shortName) {
         JSONObject output = new JSONObject();
         output.put("short", shortName);
-        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/locations/" + this.id,
-                "POST", application.getParameters(), output.toJSONString()));
+        Pair<Integer, JSONObject> request = application.request(application.getHost() + "api/application/locations/" + this.id,
+                HttpMethods.POST, application.getParameters(), output.toJSONString());
 
         if (request.getValue1() == 200) {
             this.shortName = shortName;
@@ -67,8 +68,8 @@ public class ApplicationLocation {
     public int setLongName(String longName) {
         JSONObject output = new JSONObject();
         output.put("long", longName);
-        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/locations/" + this.id,
-                "POST", application.getParameters(), output.toJSONString()));
+        Pair<Integer, JSONObject> request = application.request(application.getHost() + "api/application/locations/" + this.id,
+                HttpMethods.POST, application.getParameters(), output.toJSONString());
 
         if (request.getValue1() == 200) {
             this.longName = longName;

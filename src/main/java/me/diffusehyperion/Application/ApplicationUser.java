@@ -1,5 +1,6 @@
 package me.diffusehyperion.Application;
 
+import me.diffusehyperion.HttpMethods;
 import me.diffusehyperion.Pair;
 import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
@@ -104,8 +105,8 @@ public class ApplicationUser {
             output.put("password", password);
         }
 
-        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/users/" + id,
-        "PATCH", application.getParameters(), output.toString()));
+        Pair<Integer, JSONObject> request = application.request(application.getHost() + "api/application/users/" + id,
+        HttpMethods.PATCH, application.getParameters(), output.toString());
         return request.getValue1();
     }
 
@@ -144,8 +145,8 @@ public class ApplicationUser {
     }
 
     public int deleteUser() {
-        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/users" + this.id,
-                "DELETE", application.getParameters(), null));
+        Pair<Integer, JSONObject> request = application.request(application.getHost() + "api/application/users" + this.id,
+                HttpMethods.DELETE, application.getParameters(), null);
         return request.getValue1();
     }
 }

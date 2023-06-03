@@ -1,5 +1,6 @@
 package me.diffusehyperion.Application;
 
+import me.diffusehyperion.HttpMethods;
 import me.diffusehyperion.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -141,8 +142,8 @@ public class ApplicationNode {
     }
 
     public List<ApplicationNodeAllocations> getAllocations() {
-        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/nodes/" + id + "/allocations",
-                "GET", application.getParameters(), null));
+        Pair<Integer, JSONObject> request = application.request(application.getHost() + "api/application/nodes/" + id + "/allocations",
+                HttpMethods.GET, application.getParameters(), null);
         JSONArray allocationsArray = (JSONArray) request.getValue2().get("data");
         List<ApplicationNodeAllocations> allocationsList = new ArrayList<>();
         for (Object object : allocationsArray) {
@@ -156,15 +157,15 @@ public class ApplicationNode {
         JSONObject output = new JSONObject();
         output.put("ip", ip);
         output.put("ports", ports.toArray());
-        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/nodes/" + id + "/allocations",
-                "POST", application.getParameters(), output.toString()));
+        Pair<Integer, JSONObject> request = application.request(application.getHost() + "api/application/nodes/" + id + "/allocations",
+                HttpMethods.POST, application.getParameters(), output.toString());
 
         return request.getValue1();
     }
 
     public int deleteAllocation(int allocationID) {
-        Pair<Integer, JSONObject> request = application.handleRequest(application.makeRequest(application.getHost() + "api/application/nodes/" + id + "/allocations/" + allocationID,
-                "DELETE", application.getParameters(), null));
+        Pair<Integer, JSONObject> request = application.request(application.getHost() + "api/application/nodes/" + id + "/allocations/" + allocationID,
+                HttpMethods.DELETE, application.getParameters(), null);
         return request.getValue1();
     }
 }

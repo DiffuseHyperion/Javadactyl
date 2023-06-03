@@ -1,5 +1,6 @@
 package me.diffusehyperion.Client;
 
+import me.diffusehyperion.HttpMethods;
 import me.diffusehyperion.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -65,8 +66,8 @@ public class ClientAccount {
         output.put("email", email);
         output.put("password", existingPassword);
 
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/account/email",
-                "PUT", client.getParameters(), output.toString()));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/account/email",
+                HttpMethods.PUT, client.getParameters(), output.toString());
         return request.getValue1();
     }
 
@@ -80,14 +81,14 @@ public class ClientAccount {
         output.put("password", newPassword);
         output.put("password_confirmation", confirmPassword);
 
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/account/password",
-                "PUT", client.getParameters(), output.toString()));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/account/password",
+                HttpMethods.PUT, client.getParameters(), output.toString());
         return request.getValue1();
     }
 
     public List<ClientAccountAPIKey> getAPIKeys() {
-        Pair<Integer, JSONObject> request = client.handleRequest(client.makeRequest(client.getHost() + "api/client/account/api-keys",
-                "GET", client.getParameters(), null));
+        Pair<Integer, JSONObject> request = client.request(client.getHost() + "api/client/account/api-keys",
+                HttpMethods.GET, client.getParameters(), null);
         JSONArray keyArray = (JSONArray) request.getValue2().get("data");
         List<ClientAccountAPIKey> keyList = new ArrayList<>();
         for (Object object : keyArray) {

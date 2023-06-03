@@ -1,5 +1,6 @@
 package me.diffusehyperion.Client;
 
+import me.diffusehyperion.HttpMethods;
 import me.diffusehyperion.PterodactylAPI;
 import me.diffusehyperion.Pair;
 import org.json.simple.JSONArray;
@@ -13,8 +14,8 @@ public class Client extends PterodactylAPI {
     }
 
     public List<ClientServer> getServers(){
-        Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/client",
-                "GET", getParameters(), null));
+        Pair<Integer, JSONObject> request = request(getHost() + "api/client",
+                HttpMethods.GET, getParameters(), null);
         JSONArray serversArray = (JSONArray) request.getValue2().get("data");
 
         List<ClientServer> serverList = new ArrayList<>();
@@ -25,14 +26,14 @@ public class Client extends PterodactylAPI {
     }
 
     public ClientServer getServer(String identifier) {
-        Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/client/servers/" + identifier,
-                "GET", getParameters(), null));
+        Pair<Integer, JSONObject> request = request(getHost() + "api/client/servers/" + identifier,
+                HttpMethods.GET, getParameters(), null);
         return new ClientServer(this, (JSONObject) request.getValue2().get("attributes"));
     }
 
     public ClientAccount getAccount() {
-        Pair<Integer, JSONObject> request = handleRequest(makeRequest(getHost() + "api/client/account",
-                "GET", getParameters(), null));
+        Pair<Integer, JSONObject> request = request(getHost() + "api/client/account",
+                HttpMethods.GET, getParameters(), null);
         return new ClientAccount(this, (JSONObject) request.getValue2().get("attributes"));
     }
 }

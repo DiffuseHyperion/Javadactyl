@@ -1,5 +1,6 @@
 package me.diffusehyperion.Client;
 
+import me.diffusehyperion.HttpMethods;
 import me.diffusehyperion.Pair;
 import org.json.simple.JSONObject;
 
@@ -62,8 +63,8 @@ public class ClientServerDatabase {
     }
 
     public Pair<Integer, String> rotatePassword() {
-        Pair<Integer, JSONObject> request = server.getClient().handleRequest(server.getClient().makeRequest(server.getClient().getHost() + "api/client/servers/" + id + "/databases/" + server.getIdentifier() + "/rotate-password",
-                "POST", server.getClient().getParameters(), null));
+        Pair<Integer, JSONObject> request = server.getClient().request(server.getClient().getHost() + "api/client/servers/" + id + "/databases/" + server.getIdentifier() + "/rotate-password",
+                HttpMethods.POST, server.getClient().getParameters(), null);
         return new Pair<>(request.getValue1(), ((String) (((JSONObject) ((JSONObject) ((JSONObject) ((JSONObject)
                         request.getValue2().get("attributes")).get("relationships")).get("password")).get("attributes")).get("password"))));
     }
