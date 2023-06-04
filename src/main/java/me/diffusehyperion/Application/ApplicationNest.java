@@ -5,6 +5,7 @@ import me.diffusehyperion.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +17,8 @@ public class ApplicationNest {
     private String author;
     private String name;
     private String description;
-    private String createdAt;
-    private String updatedAt;
+    private ZonedDateTime createdAt;
+    private ZonedDateTime updatedAt;
 
     public ApplicationNest(Application application, JSONObject jsonObject) {
         this.application = application;
@@ -26,8 +27,8 @@ public class ApplicationNest {
         this.author = (String) jsonObject.get("author");
         this.name = (String) jsonObject.get("name");
         this.description = (String) jsonObject.get("description");
-        this.createdAt = (String) jsonObject.get("created_at");
-        this.updatedAt = (String) jsonObject.get("updated_at");
+        this.createdAt = ZonedDateTime.parse((String) jsonObject.get("created_at"));
+        this.updatedAt = ZonedDateTime.parse((String) jsonObject.get("updated_at"));
     }
 
     public int getId() {
@@ -50,11 +51,11 @@ public class ApplicationNest {
         return description;
     }
 
-    public String getCreatedAt() {
+    public ZonedDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public String getUpdatedAt() {
+    public ZonedDateTime getUpdatedAt() {
         return updatedAt;
     }
 

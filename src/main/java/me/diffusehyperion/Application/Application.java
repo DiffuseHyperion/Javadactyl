@@ -111,4 +111,29 @@ public class Application extends PterodactylAPI {
                 HttpMethods.GET, getParameters(), null);
         return new ApplicationNest(this, (JSONObject) request.getValue2().get("attributes"));
     }
+
+    public List<ApplicationServer> getServers() {
+        Pair<Integer, JSONObject> request = request(getHost() + "api/application/servers",
+                HttpMethods.GET, getParameters(), null);
+        JSONArray serversArray = (JSONArray) request.getValue2().get("data");
+
+        List<ApplicationServer> servers = new ArrayList<>();
+        for (Object server : serversArray) {
+            JSONObject serverObject = (JSONObject) server;
+            servers.add(new ApplicationServer((JSONObject) serverObject.get("attributes")));
+        }
+        return servers;
+    }
+
+    public ApplicationServer getServer(int ID) {
+        Pair<Integer, JSONObject> request = request(getHost() + "api/application/servers/" + ID,
+                HttpMethods.GET, getParameters(), null);
+        return new ApplicationServer((JSONObject) request.getValue2().get("attributes"));
+    }
+
+    public ApplicationServer getServer(String externalID) {
+        Pair<Integer, JSONObject> request = request(getHost() + "api/application/servers/external/" + externalID,
+                HttpMethods.GET, getParameters(), null);
+        return new ApplicationServer((JSONObject) request.getValue2().get("attributes"));
+    }
 }
